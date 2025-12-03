@@ -11,6 +11,7 @@ training_data = [
     ['Orange', 3, 'Sweet', 'Orange'],
     ['Purple', 1, 'Sweet', 'Grape'],
 ]
+header = ["Color", "Size", "Taste", "Label"]
 
 #Our goal will be to predict a fruit based on sie and colour and whether its sweet or sour.
 
@@ -45,6 +46,8 @@ def entropy(rows):
     for label in counts:
         prob = counts[label] / total_rows #this is probability
         impurity -= prob * math.log2(prob) #this is -p * log(2p)
+    
+    return impurity
 
 def partition(rows,question):
     #partitions a dataset (given in the name)
@@ -61,11 +64,11 @@ def info_gain(left,right,current_uncertainity):
     p = float(len(left)) / (len(left) + len(right))
     return current_uncertainity - p * entropy(left) - (1-p) * entropy(right)
 
-def find_best_split(rows)
+def find_best_split(rows):
     current_uncertainity = entropy(rows) #calculate starting score
     best_gain = 0
     best_question = None
-    n_features = len(rows[0] - 1)
+    n_features = len(rows[0])- 1
 
     for col in range(n_features):
         values = set([row[col] for row in rows])
@@ -110,7 +113,7 @@ class DecisionNode:
 
 ##TREE BUILDING TIME
 
-def build_tree(rows)
+def build_tree(rows):
     #USES RECURSION TO BUILD TREES
     gain, question  = find_best_split(rows)
 
@@ -122,5 +125,46 @@ def build_tree(rows)
     false_branch = build_tree(false_rows)
 
     return DecisionNode(question,true_branch,false_branch)
+
+def print_tree(node, spacing=""):
+    """Printing helper."""
+    if isinstance(node, LeafNode):
+        print(spacing + "Predict", node.predictions)
+        return
+
+    print(spacing + str(node.question))
+    print(spacing + '--> True:')
+    print_tree(node.true_branch, spacing + "  ")
+    print(spacing + '--> False:')
+    print_tree(node.false_branch, spacing + "  ")
+
+#Prediction
+def classify(row,node):
+    #recursion to traverse tree to classify a single row
+
+    if isinstance(node,LeafNode):
+        return node.predictions
+    
+    if node.question.match(row):
+        return classify(row, node.true_branch)
+    else:
+        return classify(row,node.false_branch)
+
+#build on trainingset
+my_tree = build_tree(training_data)
+print("--- THE ID3 TREE --- ")
+print_tree(my_tree)
+
+print("\n--- Testing the Classifier ---")
+# Let's create a NEW fruit row: [Color, Size, Taste]
+# Example: A big green fruit that is sweet
+testing_data = [
+    ['Green', 3, 'Sweet', 'Unknown Fruit'], 
+    ['Purple', 1, 'Sour', 'Unknown Fruit']
+]
+
+for row in testing_data:
+    prediction = classify(row, my_tree)
+    print(f"Input: {row} -> Prediction: {prediction}")
     
     
