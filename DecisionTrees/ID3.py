@@ -82,3 +82,45 @@ def find_best_split(rows)
                 best_gain, best_question = gain, question
 
     return best_gain, best_question
+
+# Define Classes that we are using 
+class Question:
+    #A question is used to partition a dataset
+    def __init__(self,column,value):
+        self.column = column
+        self.value = value
+    
+    def match(self,example):
+        val = example[self.column]
+        return val == self.value
+    
+    def __repr__(self):
+        condition = "=="
+        return "Is %s %s %s?" % (header[self.column],condition,str(self.value))
+
+class LeafNode:
+    def __init__(self,rows):
+        self.predictions = class_counts(rows)
+
+class DecisionNode:
+    def __init__(self,question,true_branch,false_branch):
+        self.question = question
+        self.true_branch = true_branch
+        self.false_branch = false_branch
+
+##TREE BUILDING TIME
+
+def build_tree(rows)
+    #USES RECURSION TO BUILD TREES
+    gain, question  = find_best_split(rows)
+
+    if gain == 0:
+        return LeafNode(rows)
+    
+    true_rows , false_rows = partition(rows,question)
+    true_branch = build_tree(true_rows)
+    false_branch = build_tree(false_rows)
+
+    return DecisionNode(question,true_branch,false_branch)
+    
+    
