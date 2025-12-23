@@ -21,7 +21,3 @@ A decision tree algorithm implemented to handle categorical data.
 - **Key Concepts:** Entropy, Information Gain.
 - **Current Status:** Implements recursive tree building. Handles discrete attributes.
 
-
-## Tech Stack
-* **Language:** Python 3
-* **Comparison Tool:** Weka 3.8 (used for benchmarking results)
