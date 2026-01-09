@@ -1,7 +1,7 @@
 # Data Mining and Machine Learning Implementations
 
 ## Overview
-This repository functions as a monorepo containing source code, experiments, and visualizations for my Bachelor's degree module on Data Mining and Machine Learning.
+This repository functions as a monorepo containing source code, experiments, and visualizations for my Bachelor's degree module on Data Mining and Machine Learning at University of Hertfordshire.
 
 It documents my progress in understanding the mathematical and logical foundations of standard classification and clustering algorithms.
 
